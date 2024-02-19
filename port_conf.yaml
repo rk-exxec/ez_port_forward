@@ -1,0 +1,21 @@
+vmbr0:
+    bridge: eno1
+    subnet: 10.0.0.0/24
+    forwards: 
+      101:
+          ssh: true
+          tcp: 123,345,567
+          udp: 888,999
+          tcpudp: 111,222
+      102: # maps external ports 321,345,765 to internal ports 123,345,567
+          tcp: 
+              321: 123
+              345: 345
+              765: 567
+      201: # this is equivalent to below
+          ssh:
+      202:
+          tcp:
+              20222: 22
+      333:
+        ssh: 23 # use port 23 for ssh shorthand
