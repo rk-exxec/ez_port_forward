@@ -1,3 +1,20 @@
+# ez-port-forward makes it easier to create portforwarding rules via DNAT for proxmox systems or similar.
+# Copyright (C) 2024  Raphael Kriegl
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
 from io import TextIOWrapper
 import os, sys
 from pathlib import Path
@@ -95,11 +112,9 @@ def parse_yaml(yaml_file, out_file):
                 finally:       
                     output.write("#---\n")
 
-
-
-if __name__ == "__main__":
-
+def main(*argc, **argv):
     parse_yaml("port_conf_c.yaml", "port_forwards.sh")
+
 
             
 
