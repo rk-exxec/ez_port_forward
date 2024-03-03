@@ -1,4 +1,4 @@
-# ez_port_forwarding
+# ez_port_forward
 Create DNAT port forwarding rules from easy-to-read YAML files.
 
 Are you tired of always having to look up the iptables command every couple of months to change a single port forwarding on your proxmox/hypervisor because a friend asks you to make a new container for that very popular game?
