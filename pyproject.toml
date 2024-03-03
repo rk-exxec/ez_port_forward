@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ez_port_forward"
-version = "0.1"
+version = "0.4"
 dependencies = [
     "PyYAML"
 ]
@@ -35,5 +35,5 @@ Homepage = "https://github.com/rk-exxec/ez_port_forwarding"
 Issues = "https://github.com/rk-exxec/ez_port_forwarding/issues"
 
 [project.scripts]
-ez-port-forward = "ez-port-forward:main"
-ezpf = "ez-port-forward:main"
+ez-port-forward = "ez_port_forward:main"
+ezpf = "ez_port_forward:main"
