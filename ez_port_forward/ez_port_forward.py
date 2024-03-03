@@ -37,8 +37,10 @@ def parse_protocols(prot_obj):
     if not prot_obj: return None
     # if ports are given as comma separated list, it is read as text.
     # if only list is given, we assume identical source and dest ports
-    if  isinstance(prot_obj, str):
+    if  isinstance(prot_obj, str) :
         return {int(x.strip()):int(x.strip()) for x in prot_obj.split(",")}
+    elif isinstance(prot_obj, int):
+        return {prot_obj:prot_obj}
     # yaml is read as dict, we only convert keys and values to ints
     elif isinstance(prot_obj, dict):
         return {int(k):int(v) for k,v in prot_obj.items()}
