@@ -17,5 +17,5 @@ vmbr0:
       202:
           tcp:
               20222: 22
-      333:
+      233:
         ssh: 23 # use port 23 for ssh shorthand

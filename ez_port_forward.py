@@ -1,10 +1,15 @@
-from io import TextIOWrapper
 import os, sys
+import argparse
 from pathlib import Path
+
 import yaml
 from yaml import Loader
+
 import ipaddress
 import logging
+
+# typing imports
+from io import TextIOWrapper
 
 # this dict keeps track of all ports opened
 existing_port_maps: dict[tuple[int, str], ipaddress.IPv4Address] = dict()
@@ -99,9 +104,20 @@ def parse_yaml(yaml_file, out_file):
 
 if __name__ == "__main__":
 
-    parse_yaml("port_conf_c.yaml", "port_forwards.sh")
+    
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input_yaml", type=str, default="./port_conf.yaml", help="The input yaml file. Defaults to ./port_conf.yaml", nargs="?")
+    parser.add_argument("-o", "--output", type=str, default="/etc/network/interfaces.d/port_forwards", help="Target path. Optional, defaults to /etc/network/interfaces.d/port_forwards", nargs="?")
+    
+    args = parser.parse_args()
 
-            
+    yaml_path = Path(args.input_yaml)
+    out_path = Path(args.output)
+    
+    assert yaml_path.exists(), "Input file does not exist."
+    # assert out_path, "Output path does not exist or is not writeable."
+
+    parse_yaml(yaml_path, out_path)
 
 
 
