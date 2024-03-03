@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ez_port_forward"
+version = "0.1"
+dependencies = [
+    "PyYAML"
+]
+requires-python = ">=3.6"
+authors = [
+  {name = "Raphael Kriegl"},
+]
+
+description = "Create DNAT port forwarding rules from easy-to-read YAML files."
+readme = "README.md"
+# license = {file = "LICENSE"}
+keywords = ["nat", "proxmox", "port-forwarding"]
+classifiers = [
+  "Development Status :: 3 - Alpha",
+  "Programming Language :: Python :: 3",
+  "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
+]
+
+#[project.optional-dependencies]
+#gui = ["PyQt5"]
+#cli = [
+#  "rich",
+#  "click",
+#]
+
+[project.urls]
+Homepage = "https://github.com/rk-exxec/ez_port_forwarding"
+Issues = "https://github.com/rk-exxec/ez_port_forwarding/issues"
+
+[project.scripts]
+ez-port-forward = "ez-port-forward:main"
+ezpf = "ez-port-forward:main"

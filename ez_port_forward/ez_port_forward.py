@@ -1,3 +1,21 @@
+# ez-port-forward makes it easier to create portforwarding rules via DNAT for proxmox systems or similar.
+# Copyright (C) 2024  Raphael Kriegl
+
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+
+from io import TextIOWrapper
 import os, sys
 import argparse
 from pathlib import Path
@@ -37,6 +55,10 @@ def build_command(protocol, bridge, target_ip, target_port, source_port = None):
 def write_container_commands(file: TextIOWrapper, ip, bridge, tcp_rules=None, udp_rules=None, ssh=None, tcpudp_rules=None):
 
     def write_rules_helper(prot, src, dest):
+        # if port number too large
+        if(src > 65535 or dest > 65535):
+            logging.warning(f"Port {src} or {dest} larger than max allowed (65535). Port forward will be commented out in the file.")
+            file.write("#") # if the command is declared invalid it is still written to file, just commented out
         # if port was already opened
         if (src,prot) in existing_port_maps.keys():
             logging.warning(f"Port {src} already opened for {existing_port_maps[(src,prot)]}. Port forward will be commented out in the file.")
@@ -85,7 +107,7 @@ def parse_yaml(yaml_file, out_file):
                         if isinstance(ssh,bool) or not isinstance(ssh,int): 
                             ssh = {cont_id*100 + 22:22} # assign default if key exists and no int value is specified
                         else:
-                            ssh = {cont_id*100 + ssh:22}
+                            ssh = {cont_id*100 + ssh:ssh} # use specified internal ssh port if given
 
                     else: ssh = None
                             
@@ -101,10 +123,7 @@ def parse_yaml(yaml_file, out_file):
                     output.write("#---\n")
 
 
-
-if __name__ == "__main__":
-
-    
+def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("input_yaml", type=str, default="./port_conf.yaml", help="The input yaml file. Defaults to ./port_conf.yaml", nargs="?")
     parser.add_argument("-o", "--output", type=str, default="/etc/network/interfaces.d/port_forwards", help="Target path. Optional, defaults to /etc/network/interfaces.d/port_forwards", nargs="?")
@@ -119,6 +138,10 @@ if __name__ == "__main__":
 
     parse_yaml(yaml_path, out_path)
 
+
+
+if __name__ == "__main__":
+    main()
 
 
 
