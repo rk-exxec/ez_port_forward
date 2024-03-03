@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "ez_port_forward"
-version = "0.4"
+version = "0.1.0001"
 dependencies = [
     "PyYAML"
 ]
@@ -18,17 +18,10 @@ readme = "README.md"
 # license = {file = "LICENSE"}
 keywords = ["nat", "proxmox", "port-forwarding"]
 classifiers = [
-  "Development Status :: 3 - Alpha",
+  "Development Status :: 4 - Beta",
   "Programming Language :: Python :: 3",
   "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
 ]
-
-#[project.optional-dependencies]
-#gui = ["PyQt5"]
-#cli = [
-#  "rich",
-#  "click",
-#]
 
 [project.urls]
 Homepage = "https://github.com/rk-exxec/ez_port_forwarding"

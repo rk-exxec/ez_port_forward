@@ -1,5 +1,5 @@
 # ez_port_forwarding
-A script to create and configure DNAT for port forwarding on proxmox servers
+Create DNAT port forwarding rules from easy-to-read YAML files.
 
 Are you tired of always having to look up the iptables command every couple of months to change a single port forwarding on your proxmox/hypervisor because a friend asks you to make a new container for that very popular game?
 
