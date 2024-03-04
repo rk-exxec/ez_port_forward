@@ -30,3 +30,8 @@ Issues = "https://github.com/rk-exxec/ez_port_forwarding/issues"
 [project.scripts]
 ez-port-forward = "ez_port_forward:main"
 ezpf = "ez_port_forward:main"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
