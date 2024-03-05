@@ -38,10 +38,14 @@ existing_port_maps: dict[tuple[int, str], ipaddress.IPv4Address] = dict()
 def parse_protocols(prot_obj: PortMappingType):
     # returns dict that maps source ports to dest ports
     if not prot_obj: return None
+    # bool is an invalid datatype, but would be accepted by the int check later
+    if isinstance(prot_obj, bool): return None
+
     # if ports are given as comma separated list, it is read as text.
     # if only list is given, we assume identical source and dest ports
     if  isinstance(prot_obj, str) :
         return {int(x.strip()):int(x.strip()) for x in prot_obj.split(",")}
+    # single ports are parsed as int
     elif isinstance(prot_obj, int):
         return {prot_obj:prot_obj}
     # yaml is read as dict, we only convert keys and values to ints
