@@ -26,6 +26,8 @@ from yaml import Loader
 import ipaddress
 import logging
 
+logger = logging.getLogger(__name__)
+
 # typing imports
 from typing import TypeAlias, Union
 from io import TextIOWrapper
@@ -131,16 +133,19 @@ def write_iptables_file(yaml_dict, out_file):
                     udp = parse_protocols(cont_conf.pop("udp", None))
                     tcpudp = parse_protocols(cont_conf.pop("tcpudp", None))
                                 
-
                     write_container_commands(output, container_ip, bridge, tcp, udp, ssh, tcpudp)
                 except Exception as ex:
                     logging.error(f"Error while parsing rules for Container ID {cont_id} for interface <{iname}> with subnet <{subnet}>: \n{ex}")
+                    output.write("#  ERROR -- See console log.")
                     continue
                 finally:       
                     output.write("#---\n")
 
 
 def main():
+    logger.setLevel(logging.INFO)
+
+
     parser = argparse.ArgumentParser()
     parser.add_argument("input_yaml", type=str, default="./port_conf.yaml", help="The input yaml file. Defaults to ./port_conf.yaml", nargs="?")
     parser.add_argument("-o", "--output", type=str, default="/etc/network/interfaces.d/port_forwards", help="Target path. Optional, defaults to /etc/network/interfaces.d/port_forwards", nargs="?")
