@@ -1,6 +1,4 @@
 # unittests
-import sys
-sys.path.append("..")
 from ez_port_forward.ez_port_forward import parse_protocols, parse_yaml, build_command, write_container_commands
 
 def test_parse_protocols():

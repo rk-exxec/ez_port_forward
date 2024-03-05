@@ -35,3 +35,6 @@ ezpf = "ez_port_forward:main"
 addopts = [
     "--import-mode=importlib",
 ]
+pythonpath = [
+    "."
+]
