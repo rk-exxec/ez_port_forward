@@ -129,7 +129,7 @@ def write_iptables_file(yaml_dict, out_file):
                             
                     tcp = parse_protocols(cont_conf.pop("tcp", None))
                     udp = parse_protocols(cont_conf.pop("udp", None))
-                    tcpudp = parse_protocols(cont_conf.pop("tcpudp", dict())|cont_conf.pop("udptcp", dict()))
+                    tcpudp = parse_protocols(cont_conf.pop("tcpudp", None))
                                 
 
                     write_container_commands(output, container_ip, bridge, tcp, udp, ssh, tcpudp)
