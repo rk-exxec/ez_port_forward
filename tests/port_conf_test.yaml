@@ -27,6 +27,34 @@ vmbr0:
         110:
             tcp:
                 105: 106
+
+    # udp tests
+        111:        
+            udp: 100,101,102
+        112:
+            udp: 103
+        113:
+            udp:
+        114:
+            udp:
+                104:
+        115:
+            udp:
+                105: 106
+
+    # udp tests
+        116:        
+            tcpudp: 100,101,102
+        117:
+            tcpudp: 103
+        118:
+            tcpudp:
+        119:
+            tcpudp:
+                104:
+        120:
+            tcpudp:
+                105: 106
         
         # maps external ports 321,345,765 to internal ports 123,345,567
         # 102:
