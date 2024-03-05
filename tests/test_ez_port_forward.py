@@ -27,6 +27,18 @@ def test_parse_protocols():
     result = parse_protocols(package)
     assert result == {123:123}
 
+def test_build_command():
+
+    from ipaddress import ip_address
+    result = build_command("tcp", "eno1", ip_address("10.0.0.1"), 123, 456)
+    assert result == \
+    "        post-up iptables -t nat -A PREROUTING -i eno1 -p tcp --dport 456 -j DNAT --to 10.0.0.1:123\n"
+
+    result = build_command("tcp", "eno1", ip_address("10.0.0.1"), 123)
+    assert result == \
+    "        post-up iptables -t nat -A PREROUTING -i eno1 -p tcp --dport 123 -j DNAT --to 10.0.0.1:123\n"
+    
+
 
 
 
