@@ -93,13 +93,20 @@ def write_container_commands(file: TextIOWrapper, ip:ipaddress.IPv4Address, brid
             write_rules_helper("udp", src, dest)
 
 
-def parse_yaml(yaml_file, out_file):
+def parse_yaml(yaml_file):
     with open(yaml_file) as conf:
-        port_conf_dict : dict = yaml.load(conf, Loader)
+        try:
+            yaml_dict : dict = yaml.load(conf, Loader)
+        except yaml.YAMLError as ye:
+            logging.error(f"Error while parsing YAML file:  {str(ye)}")
+            raise
 
+    return yaml_dict
+
+def write_iptables_file(yaml_dict, out_file):
     with open(out_file, "w") as output:
 
-        for iname,iconf in port_conf_dict.items():
+        for iname,iconf in yaml_dict.items():
             output.write(f"iface {iname} inet static\n")
             bridge = iconf.pop("bridge")
             subnet = ipaddress.IPv4Network(iconf.pop("subnet"))
@@ -145,7 +152,9 @@ def main():
     assert yaml_path.exists(), "Input file does not exist."
     # assert out_path, "Output path does not exist or is not writeable."
 
-    parse_yaml(yaml_path, out_path)
+    yaml_dict = parse_yaml(yaml_path)
+
+    write_iptables_file(yaml_dict, out_path)
 
 
 
