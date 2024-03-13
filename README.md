@@ -1,4 +1,7 @@
 # ez_port_forward
+[![PyPI - Version](https://img.shields.io/pypi/v/ez-port-forward?style=flat-square&logo=pypi&label=PyPI)](https://pypi.org/project/ez-port-forward/) [![PyPI - Downloads](https://img.shields.io/pypi/dm/ez-port-forward?style=flat-square&logo=pypi)](https://pypi.org/project/ez-port-forward/) [![github](https://img.shields.io/badge/GitHub-100000?style=flat-square&logo=github&logoColor=white)](https://github.com/rk-exxec/ez_port_forward) 
+
+
 Create DNAT port forwarding rules from easy-to-read YAML files.
 
 Are you tired of always having to look up the iptables command every couple of months to change a single port forwarding on your proxmox/hypervisor because a friend asks you to make a new container for that very popular game?
