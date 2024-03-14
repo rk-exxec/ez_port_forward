@@ -42,7 +42,7 @@ Same usage for `ezpf` command.
 
 ## Requirements:
 
-Python >= 3.6  
+Python >= 3.9  
 PyYAML
 
 Make sure your `/etc/network/interfaces` config contains the line
