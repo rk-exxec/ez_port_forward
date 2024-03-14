@@ -32,12 +32,10 @@ logger = logging.getLogger(__name__)
 from typing import TypeAlias, Union
 from io import TextIOWrapper
 
-PortMappingType: TypeAlias = Union[str,int,dict[int,int]]
-
 # this dict keeps track of all ports opened
 existing_port_maps: dict[tuple[int, str], ipaddress.IPv4Address] = dict()
 
-def parse_protocols(prot_obj: PortMappingType):
+def parse_protocols(prot_obj):
     # returns dict that maps source ports to dest ports
     if not prot_obj: return None
     # bool is an invalid datatype, but would be accepted by the int check later
@@ -63,7 +61,7 @@ def build_command(protocol:str, bridge:str, target_ip:ipaddress.IPv4Address, tar
     command = f"        post-up iptables -t nat -A PREROUTING -i {bridge} -p {protocol} --dport {source_port} -j DNAT --to {target_ip}:{target_port}\n"
     return command
 
-def write_container_commands(file: TextIOWrapper, ip:ipaddress.IPv4Address, bridge:str, tcp_rules:PortMappingType=None, udp_rules:PortMappingType=None, tcpudp_rules:PortMappingType=None, ssh=None):
+def write_container_commands(file: TextIOWrapper, ip:ipaddress.IPv4Address, bridge:str, tcp_rules=None, udp_rules=None, tcpudp_rules=None, ssh=None):
 
     def write_rules_helper(prot, src, dest):
         # if port number too large
