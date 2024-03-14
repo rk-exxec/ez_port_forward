@@ -29,7 +29,6 @@ import logging
 logger = logging.getLogger(__name__)
 
 # typing imports
-from typing import TypeAlias, Union
 from io import TextIOWrapper
 
 # this dict keeps track of all ports opened
