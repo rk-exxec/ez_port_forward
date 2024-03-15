@@ -4,11 +4,11 @@
 
 Create DNAT port forwarding rules from easy-to-read YAML files.
 
-Are you tired of always having to look up the iptables command every couple of months to change a single port forwarding on your proxmox/hypervisor because a friend asks you to make a new container for that very popular game?
+Are you tired of always having to look up the `iptables` command every couple of months to change a single port forwarding on your proxmox/hypervisor because a friend asks you to make a new container for that very popular new game?
 
 Here is the solution:   
-A YAML powered port forwarding tool, that does all that for you. 
-YOu simply need to change numbers in the very readable and easy to undersand config file. The script produces 100% valid iptables commands.
+A YAML-powered port forwarding tool, that does all that for you. 
+You simply need to change some numbers in the very readable and easy-to-understand config file. The script then converts that to 100% valid `iptables` commands.
 
 Has shortcut notation for multiple ports and ssh ports, and can do different input and output ports.  
 Checks port collisions and validity.
@@ -18,27 +18,27 @@ Checks port collisions and validity.
 ## Installation:
 `pip install ez_port_forward`
 
-Installs a command `ez-port-forward` or `ezpf`.
+Installs a command `ez-port-forward` and its shorthand `ezpf`.
 
 ## Usage:
 
 - `ez-port-forward`:  
-Looks in current dir for a file named `port_config.yaml` and writes results to `/etc/network/interfaces.d/port_forwards`.  
-WILL REPLACE FILE WITHOUR ASKING!  
+Looks in the current dir for a file named `port_config.yaml` and writes the results to `/etc/network/interfaces.d/port_forwards`.  
+WILL REPLACE THE FILE WITHOUT ASKING!  
 
 - `ez-port-forward /path/to/my/port_config.yaml`:  
 Uses given input file and writes results to `/etc/network/interfaces.d/port_forwards`.  
-WILL REPLACE FILE WITHOUR ASKING!  
+WILL REPLACE FILE WITHOUT ASKING!  
 
 - `ez-port-forward -o /target/path/port_forwards`:  
-Looks in current dir for a file named `port_config.yaml` and writes results to given file.  
-WILL REPLACE FILE WITHOUR ASKING!  
+Looks in the current dir for a file named `port_config.yaml` and writes the results to the given output file.  
+WILL REPLACE THE FILE WITHOUT ASKING!  
 
 - `ez-port-forward /path/to/my/port_config.yaml -o /target/path/port_forwards`:  
-Uses given input file and writes results to given file.  
-WILL REPLACE FILE WITHOUR ASKING!  
+Uses the given input file and writes the results to the given output file.  
+WILL REPLACE THE FILE WITHOUT ASKING!  
 
-Same usage for `ezpf` command.
+Same usage for the `ezpf` shorthand.
 
 ## Requirements:
 
@@ -57,7 +57,7 @@ Tested on Proxmox.
 vmbr0:
     # the interface the bridge is connected to
     bridge: eno1
-    # the iprange of your subnet you want to make port forwards in
+    # the ip range of your subnet you want to make port forwards in
     # container ID are used as last octet for the ip
     subnet: 10.0.0.0/24
     # this section contains all the forwarding magic
