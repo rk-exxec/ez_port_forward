@@ -19,3 +19,10 @@ vmbr0:
               20222: 22
       233:
         ssh: 23 # use port 23 for ssh shorthand
+
+vmbr1:
+    bridge: eno1
+    subnet: 10.1.0.0/16 # higher CIDR range allows for larger container IDs
+    forwards: 
+        400:  # translates to IP 10.1.1.144
+            tcp: 234,567
