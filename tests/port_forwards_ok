@@ -66,11 +66,11 @@ iface vmbr1 inet static
 #===========================
 iface vmbr2 inet static
 #--- Container 400
-        post-up iptables -t nat -A PREROUTING -i eno1 -p tcp --dport 40022 -j DNAT --to 10.2.1.144:22
-        post-up iptables -t nat -A PREROUTING -i eno1 -p tcp --dport 99 -j DNAT --to 10.2.1.144:99
-        post-up iptables -t nat -A PREROUTING -i eno1 -p tcp --dport 88 -j DNAT --to 10.2.1.144:88
-        post-up iptables -t nat -A PREROUTING -i eno1 -p tcp --dport 77 -j DNAT --to 10.2.1.144:77
-        post-up iptables -t nat -A PREROUTING -i eno1 -p udp --dport 77 -j DNAT --to 10.2.1.144:66
-        post-up iptables -t nat -A PREROUTING -i eno1 -p tcp --dport 66 -j DNAT --to 10.2.1.144:66
-        post-up iptables -t nat -A PREROUTING -i eno1 -p udp --dport 66 -j DNAT --to 10.2.1.144:66
+        post-up iptables -t nat -A PREROUTING -i eno2 -p tcp --dport 40022 -j DNAT --to 10.2.1.144:22
+        post-up iptables -t nat -A PREROUTING -i eno2 -p tcp --dport 99 -j DNAT --to 10.2.1.144:99
+        post-up iptables -t nat -A PREROUTING -i eno2 -p tcp --dport 88 -j DNAT --to 10.2.1.144:88
+        post-up iptables -t nat -A PREROUTING -i eno2 -p tcp --dport 77 -j DNAT --to 10.2.1.144:77
+        post-up iptables -t nat -A PREROUTING -i eno2 -p udp --dport 77 -j DNAT --to 10.2.1.144:66
+        post-up iptables -t nat -A PREROUTING -i eno2 -p tcp --dport 66 -j DNAT --to 10.2.1.144:66
+        post-up iptables -t nat -A PREROUTING -i eno2 -p udp --dport 66 -j DNAT --to 10.2.1.144:66
 #===========================

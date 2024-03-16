@@ -79,7 +79,7 @@ vmbr1:
                 55: 66
 
 vmbr2:
-    bridge: eno1
+    bridge: eno2
     subnet: 10.2.0.0/16
     forwards: 
         400:

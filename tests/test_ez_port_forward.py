@@ -1,37 +1,49 @@
 # unittests
 from unittest.mock import patch
 from pathlib import Path
-from ez_port_forward.ez_port_forward import parse_protocols, parse_yaml, build_command, write_container_commands, main
+from ez_port_forward.ez_port_forward import parse_tcpudp_protocols, parse_ssh_protocol, parse_yaml, build_command, write_container_commands, main
 
-def test_parse_protocols():
+def test_parse_tcpudp_protocols():
     # check none
-    assert parse_protocols(None) == None
+    assert parse_tcpudp_protocols(None) == None
     # check invalid datatypes
-    assert parse_protocols(1.0) == None
-    assert parse_protocols([1,2,34]) == None
-    assert parse_protocols(["123,344,554"]) == None
-    assert parse_protocols(True) == None
+    assert parse_tcpudp_protocols(1.0) == None
+    assert parse_tcpudp_protocols([1,2,34]) == None
+    assert parse_tcpudp_protocols(["123,344,554"]) == None
+    assert parse_tcpudp_protocols(True) == None
 
     # check valid inputs
     package = {123:345, 324:5445}
-    result = parse_protocols(package)
+    result = parse_tcpudp_protocols(package)
     assert result == package
 
     package = {123: "123", "345":345, "567":"567"}
-    result = parse_protocols(package)
+    result = parse_tcpudp_protocols(package)
     assert result == {123: 123, 345:345, 567:567}
 
     package = "123, 456 ,789"
-    result = parse_protocols(package)
+    result = parse_tcpudp_protocols(package)
     assert result == {123:123, 456:456, 789:789}
 
     package = 123
-    result = parse_protocols(package)
+    result = parse_tcpudp_protocols(package)
     assert result == {123:123}
 
     package = {123: 1.0, "foo":"bar", 222:False, 12.1:True}
-    result = parse_protocols(package)
+    result = parse_tcpudp_protocols(package)
     assert result == None
+
+def test_parse_ssh_protocol():
+    assert parse_ssh_protocol(None, 100) == {10022:22}
+    assert parse_ssh_protocol(True, 100) == {10022:22}
+    assert parse_ssh_protocol(23, 100) == {10023:23}
+    # check invalid datatypes
+    assert parse_ssh_protocol(1.0, 100) == None
+    assert parse_ssh_protocol([1,2,34], 100) == None
+    assert parse_ssh_protocol(["123,344,554"], 100) == None
+    assert parse_ssh_protocol(False, 100) == None
+    assert parse_ssh_protocol(23424, 100) == None
+    assert parse_ssh_protocol(22, 100000) == None
 
 def test_build_command():
 
