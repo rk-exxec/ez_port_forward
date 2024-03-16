@@ -129,8 +129,7 @@ def write_iptables_file(yaml_dict, out_file):
                     tcp = parse_protocols(cont_conf.pop("tcp", None))
                     udp = parse_protocols(cont_conf.pop("udp", None))
                     tcpudp = parse_protocols(cont_conf.pop("tcpudp", None))
-                                
-                    write_container_commands(output, container_ip, bridge, tcp, udp, ssh, tcpudp)
+                    write_container_commands(output, container_ip, bridge, tcp, udp, tcpudp, ssh)
                 except Exception as ex:
                     logging.error(f"Error while parsing rules for Container ID {cont_id} for interface <{iname}> with subnet <{subnet}>: \n{ex}")
                     output.write("#  ERROR -- See console log.")
