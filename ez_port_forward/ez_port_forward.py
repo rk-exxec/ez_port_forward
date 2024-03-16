@@ -34,7 +34,7 @@ from io import TextIOWrapper
 # this dict keeps track of all ports opened
 existing_port_maps: dict[tuple[int, str], ipaddress.IPv4Address] = dict()
 
-def parse_protocols(prot_obj):
+def parse_tcpudp_protocols(prot_obj):
     # returns dict that maps source ports to dest ports
     if not prot_obj: return None
     # bool is an invalid datatype, but would be accepted by the int check later
@@ -70,6 +70,37 @@ def parse_protocols(prot_obj):
     else: 
         logger.error(f"Invalid datatype for ports: {type(prot_obj)}")
         return None
+    
+def parse_ssh_protocol(ssh_obj, container_id):
+    if container_id > 654:
+        logger.error(f"Container {container_id}: Container ID too large to build vaild SSH Port. Use tcp with custom external port instead.")
+        return None
+    default = {container_id*100 + 22:22}
+
+    if ssh_obj is None: 
+        return default # assign default if key exists and no int value is specified
+    # check if ssh key in dict, and if it has a specified value
+    if isinstance(ssh_obj,str):
+        logger.error(f"Container {container_id}: SSH only supports single number values.")
+        return None
+    
+    if isinstance(ssh_obj,bool): 
+        if ssh_obj:
+            return default # assign default if key exists and no int value is specified
+        else: 
+            return None
+
+    if isinstance(ssh_obj, int):
+        if ssh_obj >= 100:
+            logging.error(f"Container {container_id}: SSH port above 100 not supported. Please use TCP instead.")
+            return None
+        
+        return {container_id*100 + ssh_obj:ssh_obj} # use specified internal ssh port if given
+    
+
+    logger.error(f"Container {container_id}: Invalid SSH value type: {ssh_obj} ({type(ssh_obj)})")
+    return None
+
 
 
 def build_command(protocol:str, bridge:str, target_ip:ipaddress.IPv4Address, target_port:int, source_port:int = None):
@@ -77,7 +108,7 @@ def build_command(protocol:str, bridge:str, target_ip:ipaddress.IPv4Address, tar
     command = f"        post-up iptables -t nat -A PREROUTING -i {bridge} -p {protocol} --dport {source_port} -j DNAT --to {target_ip}:{target_port}\n"
     return command
 
-def write_container_commands(file: TextIOWrapper, ip:ipaddress.IPv4Address, bridge:str, tcp_rules=None, udp_rules=None, tcpudp_rules=None, ssh=None):
+def write_container_commands(file: TextIOWrapper, ip:ipaddress.IPv4Address, bridge:str, ssh_rule=None, tcp_rules=None, udp_rules=None, tcpudp_rules=None):
 
     def write_rules_helper(prot, src, dest):
         logger.debug(f"\tP:{prot}, S:{src}, D:{dest}")
@@ -97,8 +128,8 @@ def write_container_commands(file: TextIOWrapper, ip:ipaddress.IPv4Address, brid
             existing_port_maps[(src,prot)] = ip
         file.write(build_command(prot, bridge, ip, dest, src))
 
-    if ssh: 
-        write_rules_helper("tcp", *list(ssh.items())[0])
+    if ssh_rule: 
+        write_rules_helper("tcp", *list(ssh_rule.items())[0])
 
     if tcp_rules:
         for src, dest in tcp_rules.items():
@@ -140,32 +171,14 @@ def write_iptables_file(yaml_dict, out_file):
                     # this automatically creates an ip offset by the container id from base address in subnet and checks validity
                     container_ip = subnet[cont_id]
 
-                    # check if ssh key in dict, and if it has a specified value
-                    if "ssh" in cont_conf.keys():
-                        ssh = cont_conf["ssh"]
-                        if isinstance(ssh,str):
-                            logger.error(f"Container {cont_id}: SSH only supports single number values.")
-                            ssh = None
-                        elif (ssh and isinstance(ssh,bool)) or ssh is None: 
-                            ssh = {cont_id*100 + 22:22} # assign default if key exists and no int value is specified
-                        elif isinstance(ssh, int):
-                            if ssh >= 100:
-                                logging.error(f"Container {cont_id}: SSH port above 100 not supported. Please use TCP instead.")
-                                ssh = None
-                            else: ssh = {cont_id*100 + ssh:ssh} # use specified internal ssh port if given
-                        else:
-                            logger.error(f"Container {cont_id}: Invalid SSH value type: {ssh} ({type(ssh)})")
-                            ssh = None
-
-                    else: ssh = None
-
-                    tcp = parse_protocols(cont_conf.pop("tcp", None))
-                    udp = parse_protocols(cont_conf.pop("udp", None))
-                    tcpudp = parse_protocols(cont_conf.pop("tcpudp", None))
+                    ssh = parse_ssh_protocol(cont_conf.pop("ssh", False), cont_id)
+                    tcp = parse_tcpudp_protocols(cont_conf.pop("tcp", None))
+                    udp = parse_tcpudp_protocols(cont_conf.pop("udp", None))
+                    tcpudp = parse_tcpudp_protocols(cont_conf.pop("tcpudp", None))
 
                     logger.debug(f"Writing rules for container {cont_id}")
                             
-                    write_container_commands(output, container_ip, bridge, tcp, udp, tcpudp, ssh)
+                    write_container_commands(output, container_ip, bridge, ssh, tcp, udp, tcpudp)
                 except Exception as ex:
                     logger.error(f"Error while parsing rules for Container ID {cont_id} for interface <{iname}> with subnet <{subnet}>: \n{ex}")
                     output.write("#  ERROR -- See console log.")
