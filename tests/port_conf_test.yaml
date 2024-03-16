@@ -13,6 +13,10 @@ vmbr0:
             ssh: 23
         105: 
             ssh: 2929
+        180:
+            ssh: 23,24
+        181:
+            ssh: 1.1
 
     # tcp tests
         106:        
@@ -24,6 +28,12 @@ vmbr0:
         109:
             tcp:
                 104:
+                195: 2020202
+                196: 12.0
+                197: hello
+                198: false
+                199: true
+                foo: bar
         110:
             tcp:
                 105: 106
@@ -42,30 +52,40 @@ vmbr0:
             udp:
                 105: 106
 
-    # udp tests
+    # udp tcp tests
         116:        
-            tcpudp: 100,101,102
+            tcpudp: 107,108,109
         117:
-            tcpudp: 103
+            tcpudp: 110
         118:
             tcpudp:
         119:
             tcpudp:
-                104:
+                111:
         120:
             tcpudp:
-                105: 106
-        
-        # maps external ports 321,345,765 to internal ports 123,345,567
-        # 102:
-        #     tcp: 
-        #         321: 123
-        #         345: 345
-        #         765: 567
-        # 201: # this is equivalent to below
-        #     ssh:
-        # 202:
-        #     tcp:
-        #         20222: 22
-        # 233:
-        #     ssh: 23 # use port 23 for ssh shorthand
+                112: 112
+
+vmbr1:
+    bridge: eno1
+    subnet: 10.0.2.0/24
+    forwards: 
+        201:
+            ssh:
+            tcp: 11,22,33
+            udp:
+                33: 44
+            tcpudp:
+                55: 66
+
+vmbr2:
+    bridge: eno1
+    subnet: 10.2.0.0/16
+    forwards: 
+        400:
+            ssh:
+            tcp: 99,88,77
+            udp:
+                77: 66
+            tcpudp:
+                66: 66

@@ -1,5 +1,7 @@
 # unittests
-from ez_port_forward.ez_port_forward import parse_protocols, parse_yaml, build_command, write_container_commands
+from unittest.mock import patch
+from pathlib import Path
+from ez_port_forward.ez_port_forward import parse_protocols, parse_yaml, build_command, write_container_commands, main
 
 def test_parse_protocols():
     # check none
@@ -27,6 +29,10 @@ def test_parse_protocols():
     result = parse_protocols(package)
     assert result == {123:123}
 
+    package = {123: 1.0, "foo":"bar", 222:False, 12.1:True}
+    result = parse_protocols(package)
+    assert result == None
+
 def test_build_command():
 
     from ipaddress import ip_address
@@ -37,8 +43,13 @@ def test_build_command():
     result = build_command("tcp", "eno1", ip_address("10.0.0.1"), 123)
     assert result == \
     "        post-up iptables -t nat -A PREROUTING -i eno1 -p tcp --dport 123 -j DNAT --to 10.0.0.1:123\n"
+
+
+def test_whole_files():
+    import filecmp
+    main(["./tests/port_conf_test.yaml", "-o", "./tests/port_forwards"])
+
+    assert Path("tests/port_forwards").exists(), "File was not created"
+    assert filecmp.cmp("tests/port_forwards", "tests/port_forwards_ok"), "Output not ok"
+
     
-
-
-
-
