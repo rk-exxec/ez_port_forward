@@ -1,4 +1,4 @@
-# ez_port_forward
+a# ez_port_forward
 [![PyPI - Version](https://img.shields.io/pypi/v/ez-port-forward?style=flat-square&logo=pypi&label=PyPI)](https://pypi.org/project/ez-port-forward/) [![PyPI - Downloads](https://img.shields.io/pypi/dm/ez-port-forward?style=flat-square&logo=pypi)](https://pypi.org/project/ez-port-forward/) [![github](https://img.shields.io/badge/GitHub-100000?style=flat-square&logo=github&logoColor=white)](https://github.com/rk-exxec/ez_port_forward) 
 
 
@@ -58,11 +58,11 @@ vmbr0:
     # the interface the bridge is connected to
     bridge: eno1
     # the ip range of your subnet you want to make port forwards in
-    # container ID are used as last octet for the ip
+    # container IDs are used as index into the subnet range
     subnet: 10.0.0.0/24
     # this section contains all the forwarding magic
     forwards: 
-    # this forwards to the container with id 101 and ip 10.0.0.101
+    # this forwards to the container with id 101 and ip 10.0.0.101 (or the 101th IP in the specified subnet above, will fail if id/index outside of subnet)
         101:
             # forwards external port 10122 to internal port 22
             ssh: true
